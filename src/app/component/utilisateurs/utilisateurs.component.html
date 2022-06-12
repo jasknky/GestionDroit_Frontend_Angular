@@ -1,0 +1,72 @@
+<kendo-textbox #filterUtilisateursNom placeholder="" 
+[clearButton]="true"  
+(valueChange)="onChange($event)" 
+onkeydown.enter="onKeyDownEvent($event)"  >
+</kendo-textbox>
+<button kendoButton (click)="onButtonClick(filterUtilisateursNom.value)" >
+  Ok
+</button>
+
+<div kendoDialogContainer></div>
+<kendo-grid #gridUtilisateur [data]="gridView" 
+[height]="600"
+[pageSize]="state.take"
+[skip]="state.skip"
+[pageable]="true"
+[sortable]="true"
+[sort]="state.sort"
+[navigable]="true"
+[selectable]="true"
+(dataStateChange)="dataStateChange($event)"
+(edit)="editHandler($event)" (cancel)="cancelHandler($event)"
+(save)="saveHandler($event)" (remove)="removeHandler($event)"
+(add)="addHandler($event)"
+(detailExpand)="onExpandHandler($event)"
+(selectionChange)="gridUtilisateurSelectionChange(gridUtilisateur, $event)">
+  <ng-template kendoGridToolbarTemplate>
+      <button kendoGridAddCommand>Ajouter un utilisateur</button>
+  </ng-template>
+  <kendo-grid-column field="USR_LOGIN" title="Login" >
+  </kendo-grid-column>
+  <kendo-grid-column field="USR_NOM_COMPLET" title="Nom complet">
+  </kendo-grid-column>
+  <kendo-grid-column field="USR_NOM" title="Nom" >
+  </kendo-grid-column>
+  <kendo-grid-column field="USR_PRENOM" title="Prénom" >
+  </kendo-grid-column>
+  <kendo-grid-column field="USR_ACTIF_BOOL" title="Actif" editor="boolean" >
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <input type="checkbox" [checked]="dataItem.USR_ACTIF_BOOL" disabled   />
+    </ng-template>
+    <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+      <input
+      [checked]="dataItem.USR_ACTIF_BOOL"
+      (click)="toggle(dataItem,formGroup)"
+        kendoGridFocusable
+        type="checkbox"
+        kendoCheckBox
+      />
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="USR_ALT_MAIL" title="Email différent" >
+  </kendo-grid-column>
+  <kendo-grid-command-column title="Actions" >
+    <ng-template kendoGridCellTemplate let-isNew="isNew">
+      <button kendoGridEditCommand [primary]="true">Modifier</button>
+      <button kendoGridRemoveCommand >Supprimer</button>
+      <button kendoGridSaveCommand [disabled]="formGroup?.invalid">
+        {{ isNew ? "Ajouter" : "Modifier" }}
+      </button>
+      <button kendoGridCancelCommand>
+        {{ isNew ? "Annuler" : "Annuler" }}
+      </button>
+    </ng-template>
+  </kendo-grid-command-column>
+  
+  
+</kendo-grid>
+<br />
+
+<div >
+  <app-utilisateur-groupe [utilisateur]="selectedUtilisateur"></app-utilisateur-groupe>
+</div>

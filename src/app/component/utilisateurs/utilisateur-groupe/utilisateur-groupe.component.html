@@ -1,0 +1,86 @@
+<kendo-grid #gridGroupe
+[data]="gridView"
+[pageSize]="state.take"
+[skip]="state.skip"
+[pageable]="true"
+[sortable]="true"
+[sort]="state.sort"
+[navigable]="true"
+[selectable]="true"
+kendoGridFocusable
+(dataStateChange)="dataStateChange($event)"
+(cancel)="cancelHandler($event)"
+(save)="saveHandler($event)" (remove)="removeHandler($event)"
+(add)="addHandler($event)">
+  <ng-template kendoGridToolbarTemplate>
+      <button kendoGridAddCommand>Ajouter une inscription</button>
+  </ng-template>
+
+  <kendo-grid-column field="GRP_APPLI_ID" title="Application" >
+    <ng-template kendoGridCellTemplate let-dataItem>
+      {{ setApplication(dataItem.GRP_APPLI_ID)?.APPLI_NOM_COURT }}
+    </ng-template>
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-column="column"
+      let-formGroup="formGroup"
+    >
+      <kendo-dropdownlist
+      #ddlAppli
+        [data]="applications"
+        [defaultItem]="{ GRP_APPLI_ID: null, APPLI_NOM_COURT: 'Sélectionnez une application' }"
+        textField="APPLI_NOM_COURT"
+        valueField="GRP_APPLI_ID"
+        [valuePrimitive]="true"
+        [formControl]="formGroup.get('GRP_APPLI_ID')"
+        (valueChange)="onApplicationChange($event)"
+        (selectionChange)="testSelectionChange($event)"
+      >
+      </kendo-dropdownlist>
+      
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="GRP_ID" title="Groupe" >
+    <ng-template kendoGridCellTemplate let-dataItem>
+      {{ setGroupe(dataItem.GRP_ID)?.GRP_NOM }}
+    </ng-template>
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-column="column"
+      let-formGroup="formGroup"
+    >
+      <kendo-dropdownlist
+      #ddlAppli
+        [data]="groupes"
+        [defaultItem]="{ GRP_ID: null, GRP_NOM: 'Sélectionnez un groupe' }"
+        textField="GRP_NOM"
+        valueField="GRP_ID"
+        [valuePrimitive]="true"
+        [formControl]="formGroup.get('GRP_ID')"
+      >
+      </kendo-dropdownlist>
+      
+    </ng-template>
+  </kendo-grid-column>
+
+
+  <kendo-grid-command-column title="Actions" >
+    <ng-template kendoGridCellTemplate let-isNew="isNew">
+      <button kendoGridRemoveCommand >Supprimer</button>
+      <button kendoGridSaveCommand [disabled]="formGroup?.invalid">
+       "Ajouter" 
+      </button>
+      <button kendoGridCancelCommand>
+      "Annuler" 
+      </button>
+    </ng-template>
+  </kendo-grid-command-column>
+
+  <kendo-grid-messages
+        noRecords="Aucun Enregistrement."
+      >
+  </kendo-grid-messages>
+</kendo-grid>

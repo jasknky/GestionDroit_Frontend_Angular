@@ -1,0 +1,59 @@
+<kendo-textbox #filterApplicationNom placeholder="" 
+[clearButton]="true"  
+(valueChange)="onChange($event)" 
+onkeydown.enter="onKeyDownEvent($event)"  >
+</kendo-textbox>
+<button kendoButton (click)="onButtonClick(filterApplicationNom.value)" >
+  Ok
+</button>
+
+<div kendoDialogContainer></div>
+<kendo-grid #gridApplication [data]="gridView" 
+[height]="600"
+[pageSize]="state.take"
+[skip]="state.skip"
+[pageable]="true"
+[sortable]="true"
+[sort]="state.sort"
+[navigable]="true"
+[selectable]="true"
+(dataStateChange)="dataStateChange($event)"
+(edit)="editHandler($event)" (cancel)="cancelHandler($event)"
+(save)="saveHandler($event)" (remove)="removeHandler($event)"
+(add)="addHandler($event)"
+(detailExpand)="onExpandHandler($event)"
+(selectionChange)="gridApplicationSelectionChange(gridApplication, $event)">
+  <ng-template kendoGridToolbarTemplate>
+      <button kendoGridAddCommand>Ajouter une application</button>
+  </ng-template>
+  <kendo-grid-column field="APPLI_NOM_COURT" title="Nom Court" >
+  </kendo-grid-column>
+  <kendo-grid-column field="APPLI_NOM_LONG" title="Nom Long">
+  </kendo-grid-column>
+  <kendo-grid-column field="APPLI_DESCRIPTION" title="Description" >
+  </kendo-grid-column>
+  <kendo-grid-column field="APPLI_EMAIL" title="Email" >
+  </kendo-grid-column>
+  <kendo-grid-command-column title="Actions" >
+    <ng-template kendoGridCellTemplate let-isNew="isNew">
+      <button kendoGridEditCommand [primary]="true">Modifier</button>
+      <button kendoGridRemoveCommand >Supprimer</button>
+      <button kendoGridSaveCommand [disabled]="formGroup?.invalid">
+        {{ isNew ? "Ajouter" : "Modifier" }}
+      </button>
+      <button kendoGridCancelCommand>
+        {{ isNew ? "Annuler" : "Annuler" }}
+      </button>
+    </ng-template>
+  </kendo-grid-command-column>
+  
+  
+</kendo-grid>
+<br />
+
+
+<div >
+  <app-application-groupe [application]="selectedApplication"></app-application-groupe>
+</div>
+
+  

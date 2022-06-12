@@ -1,0 +1,70 @@
+<kendo-textbox #filterUtilisateur placeholder="" 
+[clearButton]="true"  
+(valueChange)="onChange($event)" 
+onkeydown.enter="onKeyDownEvent($event)"  >
+</kendo-textbox>
+<button kendoButton (click)="onButtonClick(filterUtilisateur.value)" >
+  Ok
+</button>
+
+<div kendoDialogContainer></div>
+<kendo-grid #gridApplication [data]="gridView" 
+[height]="600"
+[pageSize]="state.take"
+[skip]="state.skip"
+[pageable]="true"
+[sortable]="true"
+[sort]="state.sort"
+[navigable]="true"
+(dataStateChange)="dataStateChange($event)"
+(cancel)="cancelHandler($event)" (edit)="editHandler($event)"
+(save)="saveHandler($event)" (remove)="removeHandler($event)"
+(add)="addHandler($event)">
+  <ng-template kendoGridToolbarTemplate>
+      <button kendoGridAddCommand>Ajouter une inscription</button>
+  </ng-template>
+  
+
+
+  <kendo-grid-column field="USR_ID" title="Utilisateur" >
+    <ng-template kendoGridCellTemplate let-dataItem>
+      {{ setUtilisateur(dataItem.USR_ID)?.USR_NOM_COMPLET }}
+    </ng-template>
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-column="column"
+      let-formGroup="formGroup"
+    >
+      <kendo-dropdownlist
+      #ddl
+        [data]="utilisateurs"
+        [defaultItem]="{ USR_ID: null, USR_NOM_COMPLET: 'Sélectionnez un utilisateur' }"
+        textField="USR_NOM_COMPLET"
+        valueField="USR_ID"
+        [valuePrimitive]="true"
+        [formControl]="formGroup.get('USR_ID')"
+        (selectionChange)="selectionChange($event)"
+      >
+      </kendo-dropdownlist>
+      
+    </ng-template>
+  </kendo-grid-column>
+
+
+  <kendo-grid-command-column title="Actions" >
+    <ng-template kendoGridCellTemplate let-isNew="isNew">
+      <button kendoGridRemoveCommand >Supprimer</button>
+      <button kendoGridSaveCommand [disabled]="formGroup?.invalid">Ajouter</button>
+      <button kendoGridCancelCommand>Annuler</button>
+    </ng-template>
+  </kendo-grid-command-column>
+  
+  
+</kendo-grid>
+<br />
+
+
+
+
+  

@@ -1,0 +1,44 @@
+<kendo-grid #gridGroupe
+[data]="gridView"
+[pageSize]="state.take"
+[skip]="state.skip"
+[pageable]="true"
+[sortable]="true"
+[sort]="state.sort"
+[navigable]="true"
+[selectable]="true"
+kendoGridFocusable
+(dataStateChange)="dataStateChange($event)"
+(edit)="editHandler($event)" (cancel)="cancelHandler($event)"
+(save)="saveHandler($event)" (remove)="removeHandler($event)"
+(add)="addHandler($event)"
+(selectionChange)="gridGroupeSelectionChange(gridGroupe, $event)">
+  <ng-template kendoGridToolbarTemplate>
+      <button kendoGridAddCommand>Ajouter un groupe</button>
+  </ng-template>
+  <kendo-grid-column field="GRP_NOM" title="Nom Court"  >
+  </kendo-grid-column>
+  <kendo-grid-column field="GRP_DESCRIPTION" title="Nom Long">
+  </kendo-grid-column>
+  <kendo-grid-command-column title="Actions" >
+    <ng-template kendoGridCellTemplate let-isNew="isNew">
+      <button kendoGridEditCommand [primary]="true">Modifier</button>
+      <button kendoGridRemoveCommand >Supprimer</button>
+      <button kendoGridSaveCommand [disabled]="formGroup?.invalid">
+        {{ isNew ? "Ajouter" : "Modifier" }}
+      </button>
+      <button kendoGridCancelCommand>
+        {{ isNew ? "Annuler" : "Annuler" }}
+      </button>
+    </ng-template>
+  </kendo-grid-command-column>
+</kendo-grid>
+
+<br />
+
+
+<div >
+  <app-application-groupe-utilisateur [groupe]="selectedGroupe"></app-application-groupe-utilisateur>
+</div>
+
+  
